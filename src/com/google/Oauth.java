@@ -168,7 +168,7 @@ public class Oauth extends HttpServlet {
 		Cookie cookie = new Cookie(cookieName,cookieValue);
 	      cookie.setMaxAge(60*60*24); 
 	      response.addCookie(cookie);
-	      request.getSession().setAttribute(cookieName, cookieValue);
+	     // request.getSession().setAttribute(cookieName, cookieValue);
 	}
 	private void getAuthCode(HttpServletRequest request, HttpServletResponse response, String client_id, String state){
 		//Client id + redirect url + scope + response type

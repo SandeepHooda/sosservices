@@ -4,7 +4,31 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  
+    <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>	
+		/WEB-INF/cxf-beans.xml
+		</param-value>
+  </context-param>
+  <listener>
+    <listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+  </listener>
+  <listener>
+    <listener-class>
+      	   org.springframework.web.context.request.RequestContextListener
+    	</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>cxf</servlet-name>
+    <servlet-class>org.apache.cxf.transport.servlet.CXFServlet </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cxf</servlet-name>
+    <url-pattern>/ws/*</url-pattern>
+  </servlet-mapping>
   <servlet>
     <description></description>
     <display-name>Oauth</display-name>
@@ -15,5 +39,15 @@
     <servlet-name>Oauth</servlet-name>
     <url-pattern>/Oauth</url-pattern>
   </servlet-mapping>
-  <servlet>
+  
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>SessionTest</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+
 </web-app>

@@ -15,7 +15,7 @@ public class LoginVO {
 	private String userSuppliedTimeZone;
 	private String errorMessage;
 	private long loginTime;
-
+	private Settings userSettings;
 	private String ipAddress;
 	//private IPtoLocation ipAddressLocation;
 	//private String userAgent;
@@ -80,7 +80,12 @@ public class LoginVO {
 	public void setLoginTime(long loginTime) {
 		this.loginTime = loginTime;
 	}
-	
+	public Settings getUserSettings() {
+		return userSettings;
+	}
+	public void setUserSettings(Settings userSettings) {
+		this.userSettings = userSettings;
+	}
 	public String getIpAddress() {
 		return ipAddress;
 	}

@@ -1,0 +1,26 @@
+<div class="completer__wrapper text-box" > 
+    <div resize-selections="" 
+    class="form-control template-editor-holder b-user-says-editor ng-pristine ng-valid ng-isolate-scope ng-not-empty custom-classifier-enabled ng-touched" 
+    contenteditable="true" spellcheck="true" placeholder="Mom +1 201 484 0255" safe-paste="" 
+    (keyup.enter)="addContact(contact.userEntry)"  [textContent]="contact.userEntry" max-length="768"
+    (input)="contact.userEntry=$event.target.textContent" name="userEntry" ngDefaultControl
+     completer-template-editor="templateEditorCommonConfig" aria-disabled="false" aria-invalid="false" 
+     style="padding-left: 10px">{{contact.userEntry}}
+    </div>
+</div>
+
+<br/><br/>
+
+<div class="completer__wrapper text-box"  *ngFor="let contact of contactList; index as i;">
+        <div resize-selections="" 
+        class="form-control template-editor-holder b-user-says-editor ng-pristine ng-valid ng-isolate-scope ng-not-empty custom-classifier-enabled ng-touched" 
+        contenteditable="false" spellcheck="true" placeholder="Mom +1 201 484 0255" safe-paste="" 
+        style="padding-left: 10px">{{contact.userEntry}} 
+            <div class="list-group-ico-item" style="float: right;">
+               <a class="ico-item intent-template-remove ng-scope" 
+               (click)="delete(i)" tabindex="-1">
+                <span class="glyphicon glyphicon-trash"></span>
+                </a>
+                </div>
+        </div>
+</div>

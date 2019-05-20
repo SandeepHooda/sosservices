@@ -51,6 +51,11 @@ body {
     .sidenav a {font-size: 18px;}
   }
 
+	.text-box{
+		
+		padding-left: 10px;
+		padding-right: 10px
+	}
 article,
 aside,
 details,

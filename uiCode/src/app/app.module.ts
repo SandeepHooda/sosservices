@@ -9,8 +9,7 @@ import { HomeComponent } from './comp/home/home.component';
 import { CashComponent } from './comp/cash/cash.component';
 import { LoginComponent } from './comp/login/login.component';
 
-import {AccordionModule} from 'primeng/accordion';    
-import {MenuItem} from 'primeng/api';
+
 import {SidebarModule} from 'primeng/sidebar';
 
 import { FormsModule } from '@angular/forms';

@@ -62,7 +62,7 @@ export class AppComponent implements OnInit{
   }
   showLoginPage():void{
     this.global.navigationDisabled = true;
-    this._router.navigate(['login']);
+    this._router.navigate(['home']);
   }
   getCookie(cname:String):String {
     var name = cname + "=";

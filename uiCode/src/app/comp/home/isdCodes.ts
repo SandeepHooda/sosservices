@@ -52,7 +52,6 @@ export class CountryCodes {
     "385":{"name":"Croatia (Hrvatska) ","code":"HR"},
     "357":{"name":"Cyprus ","code":"CY"},
     "420":{"name":"Czech Republic","code":"CZ"},
-    "":{"name":"Czechoslavakia (Former) See CZ Czech Republic or Slovakia","code":"CS"},
     "45":{"name":"Denmark ","code":"DK"},
     "253":{"name":"Djibouti (Former French Territory of the Afars and Issas, French Somaliland)","code":"DJ"},
     "1-767":{"name":"Dominica ","code":"DM"},

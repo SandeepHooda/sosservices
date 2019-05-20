@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
       
       if (aContact.contactName && aContact.countryCode && aContact.phoneNumber){
         
-        if (this.countryCodes.data[""+aContact.countryCode.substring(1)]){
+        if (aContact.countryCode.startsWith("+") && this.countryCodes.data[""+aContact.countryCode.substring(1)]){
           this.contactList.push(aContact);
           this.contact = new Contact();
         }

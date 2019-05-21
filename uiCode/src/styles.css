@@ -11,7 +11,13 @@ body {
     padding-bottom: 60px;
     
 }
+.simple-text {
+	padding-left: 21px;
+	font-weight: 400;
+	line-height: 1.4;
+	font-size: 24px;
 
+}
 .sidenav {
     height: 100%;
     width: 0;
@@ -9068,7 +9074,8 @@ header .navbar-nav>li>a .ico .flaticon {
     width: 100%;
     z-index: 1;
     text-align: center;
-    padding: 0px 0px 20px 0px;
+		padding: 0px 0px 20px 0px;
+		font-weight: 500;
  }
 
 .fixedfooter {

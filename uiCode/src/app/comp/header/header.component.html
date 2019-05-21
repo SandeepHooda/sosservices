@@ -2,9 +2,9 @@
 
 <div id="mySidenav" class="sidenav" (click)="closeNav()">
     <a  class="closebtn" >&times;</a>
-    <a [routerLink]="['/home']" routerLinkActive="active">home</a>
-    <a [routerLink]="['/addcash']" routerLinkActive="active">addcash</a>  
-    <a [routerLink]="['/login']" routerLinkActive="active">login</a>  
+    <a [routerLink]="['/home']" routerLinkActive="active">Home</a>
+    <a [routerLink]="['/addcash']" routerLinkActive="active">Add Cash</a>  
+    <a [routerLink]="['/login']" routerLinkActive="active">Login</a>  
 </div>
 
 <div class="fixedheader" >     
@@ -12,14 +12,16 @@
 <div class="navbar-header navbar-header-white">
   
   
-        <span style="font-size:30px;cursor:pointer;float: left;" (click)="openNav()">&#9776; 
+        <span style="font-size:30px;cursor:pointer;float: left;padding-right: 40px;" (click)="openNav()">&#9776; 
           </span>
       
-          <span style="line-height: 3">
-             header
+          <span style="line-height: 3; font-weight: 900;">
+             Emergency Contacts
           </span>
   
-     
+          <span style="font-size:20px;cursor:pointer;float: right;font-weight: 700;" (click)="openNav()"> 
+          <img src="assets/img/cash-in-hand.png" style="width: 40px; height: 30px; padding-right: 10px;">
+          </span>
 
     
 </div>

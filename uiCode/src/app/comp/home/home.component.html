@@ -8,8 +8,8 @@
      style="padding-left: 10px">{{contact.userEntry}}
     </div>
 </div>
-
-<br/><br/>
+<p-messages [(value)]="msgs"></p-messages>
+<br/>
 
 <div class="completer__wrapper text-box"  *ngFor="let contact of contactList; index as i;">
         <div resize-selections="" 
@@ -24,3 +24,5 @@
                 </div>
         </div>
 </div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>

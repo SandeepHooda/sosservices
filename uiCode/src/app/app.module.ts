@@ -23,6 +23,10 @@ import { FooterComponent } from './comp/footer/footer.component';
 import {HashLocationStrategy, Location, LocationStrategy} from '@angular/common';
 import {LoginService} from './comp/login/login.service';
 import {Global} from './comp/global/global';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -56,9 +60,13 @@ const appRoutes: Routes = [
         InputTextModule,
         DialogModule,
         ButtonModule,
-        SidebarModule
+        SidebarModule,
+        MessagesModule,
+        MessageModule,
+        ConfirmDialogModule
   ],
-  providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}, LoginService, Global],
+  providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}, 
+    LoginService, Global,ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

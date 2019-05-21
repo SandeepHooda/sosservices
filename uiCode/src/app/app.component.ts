@@ -24,7 +24,7 @@ export class AppComponent implements OnInit{
     
     if (window.location.href.indexOf("localhost") >= 0){
       local = true;
-      window.localStorage.setItem('regID', 'a6f44435-61a6-4ab4-adab-721ccf7accfc');
+      window.localStorage.setItem('regID', '8bac8840-2819-4827-ae47-c21bb423e13a');
     }
     
     this.regID = this.getCookie('regID');

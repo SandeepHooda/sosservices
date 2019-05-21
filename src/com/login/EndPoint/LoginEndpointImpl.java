@@ -1,7 +1,6 @@
 package com.login.EndPoint;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.core.Response;
 
 import com.login.facade.LoginFacade;
@@ -24,22 +23,16 @@ public class LoginEndpointImpl implements LoginEndpoint {
 	@Override
 	public Response validateRegID(String regID, HttpServletRequest request, String appTimeZone) {
 		try{
-			HttpSession session = request.getSession();
-			session.setAttribute("regID", regID);
+			
+			
            if (null != appTimeZone) {
         	   appTimeZone = appTimeZone.replace("@", "/");
            }
-			session.setAttribute("timeZoneSettings", appTimeZone);
 			
-			LoginVO loginVO = loginFacade.validateRegID(regID,  appTimeZone);
+			
+			LoginVO loginVO = loginFacade.validateRegIDAndUpdateSettings(regID,  appTimeZone);
 			if (null != loginVO) {
-				if (loginVO.getUserSuppliedTimeZone() != null) {
-					session.setAttribute("timeZoneSettings", loginVO.getUserSuppliedTimeZone());
-					
-				}
-				session.setAttribute("email", loginVO.getEmailID());
-				session.setAttribute("userName", loginVO.getName());
-				session.setAttribute("settings", loginVO.getUserSettings());
+				
 				return Response.ok().entity(loginVO).build();
 			}else {
 				LoginVO vo = new LoginVO();

@@ -27,6 +27,9 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
+import {ContactService} from './comp/home/contact.service';
+import {ToastModule} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -63,10 +66,11 @@ const appRoutes: Routes = [
         SidebarModule,
         MessagesModule,
         MessageModule,
+        ToastModule,
         ConfirmDialogModule
   ],
   providers: [Location, {provide: LocationStrategy, useClass: HashLocationStrategy}, 
-    LoginService, Global,ConfirmationService],
+    LoginService, Global,ConfirmationService, ContactService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

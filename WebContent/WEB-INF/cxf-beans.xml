@@ -34,7 +34,7 @@
         <jaxrs:serviceFactories>
         
         <ref bean = "loginEndPointFact"></ref>
-  
+  		<ref bean = "ContactEndPointFact"></ref>
         </jaxrs:serviceFactories>
          <jaxrs:providers>
           		
@@ -54,6 +54,16 @@
    		<property name="loginFacade" ref="loginFacade"/>
    </bean>
    <bean id="loginFacade" class="com.login.facade.LoginFacade">
+   </bean>
+   
+   <bean id="ContactEndPointFact" class="org.apache.cxf.jaxrs.spring.SpringResourceFactory">
+   		<property name="beanId" value="ContactEndpoint"/>
+  </bean>
+  
+   <bean id="ContactEndpoint" class="com.contact.EndPoint.ContactEndpointImpl">
+   		<property name="contactFacade" ref="contactFacade"/>
+   </bean>
+   <bean id="contactFacade" class="com.contact.facade.ContactFacade">
    </bean>
    
    

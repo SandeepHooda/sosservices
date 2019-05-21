@@ -5,7 +5,9 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
-
+import {ContactService} from './contact.service';
+import {ToastModule} from 'primeng/toast';
+import {MessageService} from 'primeng/api';
 
 
 @Component({
@@ -19,14 +21,32 @@ export class HomeComponent implements OnInit {
   public contact : Contact = new Contact();
   public contactList : Array<Contact> = [];
   public countryCodes : CountryCodes = new CountryCodes();
-  constructor(private confirmationService: ConfirmationService) { 
+  constructor(private confirmationService: ConfirmationService, private contactService : ContactService,
+    private messageService: MessageService) { 
       
   }
 
   ngOnInit() {
-    
+    this.getContactList();
   }
 
+  getContactList():void{
+    let regID = window.localStorage.getItem('regID');
+    this.contactService.getContacts(regID ).subscribe(
+      (contactList: Array<Contact>) => {
+        this.contactList = [];
+        for (let i=0;i<contactList.length; i++){
+          this.contactList.push(contactList[i]);
+        }
+        
+      }, error => {
+        console.log(error)
+        let serverError:string = "Something unusual happened. Please try again later.";
+        this.msgs.push({severity:'error', summary:'Server Error', detail:serverError});
+        //this.messageService.add({severity:'error', summary:'Service Error!', detail:serverError});
+      }
+    );
+  }
   addContact(userEntry : String):void {
     this.hideMsg();
     if (userEntry && userEntry.length>=13){
@@ -43,38 +63,53 @@ export class HomeComponent implements OnInit {
       this.fixUserInput(userEntry)
       
     
-      let error = "";
+      let errorMsg = "";
 
       if (aContact.contactName && aContact.countryCode && aContact.phoneNumber){
         aContact.phoneNumber = aContact.phoneNumber.replace(/[^0-9]/g,'');
         let isdDetail = this.countryCodes.data[""+aContact.countryCode.substring(1)];
         if (aContact.phoneNumber.length >=7 && aContact.phoneNumber.length<=15 && isdDetail){
-          this.contactList.push(aContact);
+          //this.contactList.push(aContact);
+          let regID = window.localStorage.getItem('regID');
+              this.contactService.addContact(aContact,regID ).subscribe(
+                (contactList: Array<Contact>) => {
+                  this.contactList = [];
+                  for (let i=0;i<contactList.length; i++){
+                    this.contactList.push(contactList[i]);
+                  }
+                  
+                }, error => {
+                  console.log(error)
+                  let serverError:string = "Something unusual happened. Please try again later.";
+                  this.msgs.push({severity:'error', summary:'Server Error', detail:serverError});
+                  //this.messageService.add({severity:'error', summary:'Service Error!', detail:serverError});
+                }
+              );
           this.contact = new Contact();
         }else {
           if (!isdDetail){
-            error = "<br/> Country code "+aContact.countryCode+" is invalid. It must start with +  followed by digits."
+            errorMsg = "<br/> Country code "+aContact.countryCode+" is invalid. It must start with +  followed by digits."
           }
           if (aContact.phoneNumber.length < 7 || aContact.phoneNumber.length > 15){
-            error = "<br/> Phone number must be between length 7 and 15 digits."
+            errorMsg = "<br/> Phone number must be between length 7 and 15 digits."
           }
         }
         
         
       }else {
         if (!aContact.contactName){
-          error = "<br/> Please enter a valid contact name."
+          errorMsg = "<br/> Please enter a valid contact name."
         }
         if (!aContact.phoneNumber){
-          error = "<br/> Please enter a valid contact number."
+          errorMsg = "<br/> Please enter a valid contact number."
         }
         if (!aContact.countryCode){
-          error = "<br/> Please enter a valid ISD code."
+          errorMsg = "<br/> Please enter a valid ISD code."
         }
       }
 
-      if (error !== ""){
-        this.msgs.push({severity:'error', summary:'Invalid contact details', detail:error});
+      if (errorMsg !== ""){
+        this.msgs.push({severity:'error', summary:'Invalid contact details', detail:errorMsg});
       }
       
     }else {

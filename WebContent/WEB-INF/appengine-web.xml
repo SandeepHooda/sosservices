@@ -5,7 +5,7 @@
      <property name="appengine.api.urlfetch.defaultDeadline" value="300"/>
   </system-properties>
   <threadsafe>true</threadsafe>
-  <sessions-enabled>true</sessions-enabled>
+  <sessions-enabled>false</sessions-enabled>
   <runtime>java8</runtime>
 <staging>
 <enable-jar-classes>true</enable-jar-classes>

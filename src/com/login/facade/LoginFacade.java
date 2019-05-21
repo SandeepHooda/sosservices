@@ -19,34 +19,52 @@ import mangodb.MangoDB;
 public class LoginFacade {
 	private static final Logger log = Logger.getLogger(LoginFacade.class.getName());
 	
-	public LoginVO validateRegID(String regID, String appTimeZone) {
-		log.info("regID logged into system "+regID);
+	public LoginVO validateRegID(String regID) {
 		String data = MangoDB.getDocumentWithQuery("sos-services", "registered-users", regID, null,true, null, null);
 		 Gson  json = new Gson();
-		 LoginVO result  = json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
+		 return json.fromJson(data, new TypeToken<LoginVO>() {}.getType());
+		
+	}
+	
+	public Settings getUserSettings(String email) {
+		Gson  json = new Gson();
+		String settingsJson = MangoDB.getDocumentWithQuery("sos-service-users-settings", "registered-users-settings", email, null,true, null, null);
+		 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+		 if (null == settings ) {
+			 settings = new Settings();
+			 settings.set_id(email);
+		}
+		 return settings;
+	}
+	
+	public void updateSettings(Settings settings) {
+		Gson  json = new Gson();
+		String settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
+		 MangoDB.createNewDocumentInCollection("sos-service-users-settings", "registered-users-settings", settingsJson, null);
+	}
+	public LoginVO validateRegIDAndUpdateSettings(String regID, String appTimeZone) {
+		log.info("regID logged into system "+regID);
+		LoginVO result = validateRegID( regID);
 		 String email = null;
 		 if (null != result) {
 			 email =  result.getEmailID();
 		 }
 		
 		 if (null != result && StringUtils.isNotBlank(email)) {
+			 Gson  json = new Gson();
 			 result.setEmailID(email);
 			 result.setAppTimeZone(appTimeZone);
 			 result.setLoginTime(new Date().getTime());
-			 data = json.toJson(result, new TypeToken<LoginVO>() {}.getType());
+			 String data  = json.toJson(result, new TypeToken<LoginVO>() {}.getType());
 	
 			 MangoDB.updateData("sos-services", "registered-users", data, result.get_id(),null);//Insert loging time stamp
 			 //Update settings 
-			 String settingsJson = MangoDB.getDocumentWithQuery("sos-services", "registered-users-settings", email, null,true, null, null);
-			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
-			 if (null == settings ) {
-				 settings = new Settings();
-				 settings.set_id(email);
-			}
+			 Settings settings = getUserSettings( email);
+			 
 			 settings.setAppTimeZone(appTimeZone);
 			 result.setUserSettings(settings);
-			 settingsJson = json.toJson(settings, new TypeToken<Settings>() {}.getType());
-			 MangoDB.createNewDocumentInCollection("sos-services", "registered-users-settings", settingsJson, null);
+			 
+			 updateSettings( settings);
 			 return result;
 		 }else {
 			 return null;
@@ -59,7 +77,7 @@ public class LoginFacade {
 			MangoDB.deleteDocument("idonot-remember", "registered-users", regID,  null);
 			session.invalidate();
 		
-		return validateRegID(regID, null);
+		return validateRegIDAndUpdateSettings(regID, null);
 	}
 	
 	

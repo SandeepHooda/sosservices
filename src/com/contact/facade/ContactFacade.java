@@ -5,9 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.contact.vo.Contact;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.login.facade.LoginFacade;
 import com.login.vo.LoginVO;
 import com.login.vo.Settings;
+
+import mangodb.MangoDB;
 
 public class ContactFacade {
 	private LoginFacade loginFacede = new LoginFacade();
@@ -20,7 +24,19 @@ public class ContactFacade {
 			return new ArrayList<Contact>();
 		}
 	}
+	public String checkBalance(String regID) {
+		LoginVO user = loginFacede.validateRegID(regID);
+		if (null != user) {
+			Gson json = new Gson();
+			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", user.getEmailID(), null,true, null, null);
+			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
 	
+			 return ""+settings.getCurrentCallCredits();
+		}
+		
+		return "";
+	}
+
 	
 	
 	public List<Contact> deleteContact(String regID, String entry, String name){

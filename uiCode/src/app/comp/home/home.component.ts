@@ -1,12 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Contact} from './contact';
 import {CountryCodes} from './isdCodes'
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
 import {ContactService} from './contact.service';
-import {ToastModule} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
 
 

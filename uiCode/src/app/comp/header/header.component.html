@@ -12,18 +12,18 @@
 <div class="navbar-header navbar-header-white">
   
   
-        <a [routerLink]="['/addcash']" routerLinkActive="active">
-          <span style="font-size:30px;cursor:pointer;float: left;padding-right: 40px;" >&#9776; 
+        <span style="font-size:30px;cursor:pointer;float: left;padding-right: 40px;" (click)="openNav()">&#9776; 
           </span>
-        </a>
       
           <span style="line-height: 3; font-weight: 900;">
              Emergency Contacts
           </span>
   
-          <span style="font-size:20px;cursor:pointer;float: right;font-weight: 700;" (click)="openNav()"> 
-          <img src="assets/img/cash-in-hand.png" style="width: 40px; height: 30px; padding-right: 10px;">
+          <a [routerLink]="['/addcash']" routerLinkActive="active">
+          <span style="font-size:20px;cursor:pointer;float: right;font-weight: 700;" > 
+          {{balanceAmount}}<img src="assets/img/cash-in-hand.png" style="width: 40px; height: 30px; padding-right: 10px;">
           </span>
+        </a>
 
     
 </div>

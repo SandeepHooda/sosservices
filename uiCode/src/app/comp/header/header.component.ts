@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Global} from '../global/global';
+import {ContactService} from '../home/contact.service'
 
 @Component({
   selector: 'app-header',
@@ -8,7 +9,8 @@ import {Global} from '../global/global';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private global:Global) { }
+  public balanceAmount: String = "";
+  constructor(private global:Global, private contactService :ContactService) { }
 
    openNav():void {
      if (!this.global.navigationDisabled){
@@ -24,6 +26,18 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkBalance();
   }
 
+  checkBalance():void{
+    this.contactService.checkBalance( ).subscribe(
+      (balanceAmount: String) => {
+        this.balanceAmount = balanceAmount;
+        
+      }, error => {
+        console.log(error)
+       
+      }
+    );
+  }
 }

@@ -31,5 +31,10 @@ public interface ContactEndpoint {
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response deleteContact(@PathParam("entry") String entry, @Context HttpServletRequest request );
 	
+	@GET
+	@Path("/checkBalance")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response checkBalance( @Context HttpServletRequest request );
+	
 
 }

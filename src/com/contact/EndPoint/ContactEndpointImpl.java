@@ -63,4 +63,20 @@ public class ContactEndpointImpl implements ContactEndpoint{
 		}
 	}
 
+	@Override
+	public Response checkBalance(HttpServletRequest request) {
+		try{
+			String regID = request.getHeader("Authorization");
+			System.out.println(" regID from header "+regID );
+			 
+			return Response.ok().entity(contactFacade.checkBalance(regID)).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+
 }

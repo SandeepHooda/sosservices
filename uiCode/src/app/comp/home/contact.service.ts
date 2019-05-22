@@ -29,4 +29,8 @@ export class ContactService {
   deleteContact(contact: Contact) :  Observable<Array<Contact>> {
     return this.http.delete<Array<Contact>>('/ws/contact/entry/'+contact.userEntry, this.httpOptions);
   }
+
+  checkBalance(){
+    return this.http.get<String>('/ws/contact/checkBalance', this.httpOptions);
+  }
 }

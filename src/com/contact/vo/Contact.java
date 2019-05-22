@@ -1,7 +1,7 @@
 package com.contact.vo;
 
 public class Contact {
-	private String regID;
+	
 	private String userEntry ;
 	private String countryCode ;
 	private String phoneNumber ;
@@ -31,11 +31,6 @@ public class Contact {
 	public void setContactName(String contactName) {
 		this.contactName = contactName;
 	}
-	public String getRegID() {
-		return regID;
-	}
-	public void setRegID(String regID) {
-		this.regID = regID;
-	}
+	
 
 }

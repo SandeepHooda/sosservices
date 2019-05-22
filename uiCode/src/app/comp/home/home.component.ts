@@ -31,8 +31,8 @@ export class HomeComponent implements OnInit {
   }
 
   getContactList():void{
-    let regID = window.localStorage.getItem('regID');
-    this.contactService.getContacts(regID ).subscribe(
+    
+    this.contactService.getContacts( ).subscribe(
       (contactList: Array<Contact>) => {
         this.contactList = [];
         for (let i=0;i<contactList.length; i++){
@@ -69,9 +69,9 @@ export class HomeComponent implements OnInit {
         aContact.phoneNumber = aContact.phoneNumber.replace(/[^0-9]/g,'');
         let isdDetail = this.countryCodes.data[""+aContact.countryCode.substring(1)];
         if (aContact.phoneNumber.length >=7 && aContact.phoneNumber.length<=15 && isdDetail){
-          //this.contactList.push(aContact);
-          let regID = window.localStorage.getItem('regID');
-              this.contactService.addContact(aContact,regID ).subscribe(
+          this.contactList.push(aContact);
+         
+              this.contactService.addContact(aContact ).subscribe(
                 (contactList: Array<Contact>) => {
                   this.contactList = [];
                   for (let i=0;i<contactList.length; i++){
@@ -79,6 +79,7 @@ export class HomeComponent implements OnInit {
                   }
                   
                 }, error => {
+                  this.contactList.pop();
                   console.log(error)
                   let serverError:string = "Something unusual happened. Please try again later.";
                   this.msgs.push({severity:'error', summary:'Server Error', detail:serverError});
@@ -130,6 +131,22 @@ export class HomeComponent implements OnInit {
       message: 'Are you sure that you want to delete \"'+contact.contactName.trim()+'\" from your comtact list?',
       accept: () => {
         this.contactList.splice(i,1);
+
+        this.contactService.deleteContact(contact ).subscribe(
+          (contactList: Array<Contact>) => {
+            this.contactList = [];
+            for (let i=0;i<contactList.length; i++){
+              this.contactList.push(contactList[i]);
+            }
+            
+          }, error => {
+            this.contactList.splice(i,0, contact);
+            console.log(error)
+            let serverError:string = "Something unusual happened. Please try again later.";
+            this.msgs.push({severity:'error', summary:'Server Error', detail:serverError});
+            //this.messageService.add({severity:'error', summary:'Service Error!', detail:serverError});
+          }
+        );
       }
   });
     

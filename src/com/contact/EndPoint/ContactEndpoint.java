@@ -2,6 +2,7 @@ package com.contact.EndPoint;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,9 +23,13 @@ public interface ContactEndpoint {
 	public Response addContact( Contact contact, @Context HttpServletRequest request);
 	
 	@GET
-
 	@Produces({ MediaType.APPLICATION_JSON })
 	public Response getContacts( @Context HttpServletRequest request );
+	
+	@DELETE
+	@Path("/entry/{entry}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public Response deleteContact(@PathParam("entry") String entry, @Context HttpServletRequest request );
 	
 
 }

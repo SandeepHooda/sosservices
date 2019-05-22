@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CashComponent implements OnInit {
 
+  public txnAmount :String;
   constructor() { }
 
   ngOnInit() {
   }
 
+  addCash():void{
+    if (this.txnAmount){
+      this.txnAmount= this.txnAmount.replace(/[^0-9\.]/g,'')
+      if (this.txnAmount.length > 0){
+        window.open("/AddCash?regID="+window.localStorage.getItem('regID')+"&amount="+this.txnAmount,"_self");
+      }
+      
+    }
+    
+  }
 }

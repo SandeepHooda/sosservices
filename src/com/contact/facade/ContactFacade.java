@@ -1,6 +1,7 @@
 package com.contact.facade;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.contact.vo.Contact;
@@ -20,6 +21,27 @@ public class ContactFacade {
 		}
 	}
 	
+	
+	
+	public List<Contact> deleteContact(String regID, String entry, String name){
+		Settings settings=  getSettings( regID);
+		if (null != settings && settings.getContactList() != null) {
+			Iterator<Contact> itr = settings.getContactList().iterator();
+			while (itr.hasNext()) {
+				Contact contact = itr.next();
+				if ((name != null && name.equals(contact.getUserEntry()) ) || (entry != null && entry.equals(contact.getUserEntry()) )) {
+					itr.remove();
+					break;
+				}
+			}
+			return updateContact( settings);
+		}
+		return new ArrayList<Contact>();
+	}
+	private List<Contact> updateContact(Settings settings){
+		loginFacede.updateSettings(settings);
+		return settings.getContactList();
+	}
 	public Settings  getSettings(String regID){
 		
 		//1. Get email from reg id

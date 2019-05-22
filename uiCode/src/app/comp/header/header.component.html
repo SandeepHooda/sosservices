@@ -12,8 +12,10 @@
 <div class="navbar-header navbar-header-white">
   
   
-        <span style="font-size:30px;cursor:pointer;float: left;padding-right: 40px;" (click)="openNav()">&#9776; 
+        <a [routerLink]="['/addcash']" routerLinkActive="active">
+          <span style="font-size:30px;cursor:pointer;float: left;padding-right: 40px;" >&#9776; 
           </span>
+        </a>
       
           <span style="line-height: 3; font-weight: 900;">
              Emergency Contacts

@@ -48,4 +48,19 @@ public class ContactEndpointImpl implements ContactEndpoint{
 		}
 	}
 
+	@Override
+	public Response deleteContact(String entry, HttpServletRequest request) {
+		try{
+			String regID = request.getHeader("Authorization");
+			System.out.println(" regID from header "+regID );
+			return Response.ok().entity(contactFacade.deleteContact(regID, entry, null)).build();
+		}catch(Exception e){
+			e.printStackTrace();
+			LoginVO vo = new LoginVO();
+			vo.setErrorMessage("Internal Server Error ");
+			
+			return Response.serverError().entity(vo).build();
+		}
+	}
+
 }

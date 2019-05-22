@@ -4,7 +4,7 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-    <context-param>
+  <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>	
 		/WEB-INF/cxf-beans.xml
@@ -40,6 +40,18 @@
     <url-pattern>/Oauth</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <description></description>
+    <display-name>AddCash</display-name>
+    <servlet-name>AddCash</servlet-name>
+    <servlet-class>com.Payments.AddCash</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddCash</servlet-name>
+    <url-pattern>/AddCash</url-pattern>
+  </servlet-mapping>
+  
+  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>SessionTest</web-resource-name>
@@ -49,5 +61,4 @@
       <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-
 </web-app>

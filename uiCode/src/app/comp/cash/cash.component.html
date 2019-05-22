@@ -1,12 +1,23 @@
 <span class="simple-text">
- Add cash
+ Please enter the amount in INR
 </span>
+
+<div class="completer__wrapper text-box" > 
+  <div resize-selections="" 
+  class="form-control template-editor-holder b-user-says-editor ng-pristine ng-valid ng-isolate-scope ng-not-empty custom-classifier-enabled ng-touched" 
+  contenteditable="true" spellcheck="true" placeholder="100" safe-paste="" 
+  (keyup.enter)="addCash()"  [textContent]="txnAmount" max-length="768"
+  (input)="txnAmount=$event.target.textContent" name="userEntry" ngDefaultControl
+   completer-template-editor="templateEditorCommonConfig" aria-disabled="false" aria-invalid="false" 
+   style="padding-left: 10px">{{txnAmount}}
+  </div>
+</div>
 
 <div style="padding-left: 30%;padding-top: 10%;">
   <button id="multi-button" 
    type="button" 
   class="md-button md-primary md-raised ng-binding ng-isolate-scope progress-button md-ink-ripple" 
-   data-loading="Working..."
+   data-loading="Working..." (click)="addCash()"
     style="background-color:  rgb(3,155,229) ; box-shadow: 0 2px 5px 0 rgba(0,0,0,0.26);  width: 40%; height: 30px;">
     Add Cash
   <span class="tz-bar background-horizontal"></span></button>

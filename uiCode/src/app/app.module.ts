@@ -30,11 +30,13 @@ import {ConfirmationService} from 'primeng/api';
 import {ContactService} from './comp/home/contact.service';
 import {ToastModule} from 'primeng/toast';
 import {MessageService} from 'primeng/api';
+import { AddCashSuccessComponent } from './comp/add-cash-success/add-cash-success.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'addcash',      component: CashComponent },
   { path: 'login',      component: LoginComponent },
+  { path: 'addCashSuccess',      component: AddCashSuccessComponent },
   { path: '',  redirectTo: '/home',  pathMatch: 'full'},
   { path: '**', component: HomeComponent }
 ];
@@ -46,7 +48,8 @@ const appRoutes: Routes = [
     CashComponent,
     LoginComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    AddCashSuccessComponent
   ],
   imports: [
     RouterModule,

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-cash-success',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class AddCashSuccessComponent implements OnInit {
 
   public txnID : String ="";
-  constructor() { }
+  constructor(private _router: Router) { }
 
   ngOnInit() {
     
@@ -18,6 +19,10 @@ export class AddCashSuccessComponent implements OnInit {
 
    
     
+  }
+
+  goHome():void{
+    this._router.navigate(['home']);
   }
 
 }

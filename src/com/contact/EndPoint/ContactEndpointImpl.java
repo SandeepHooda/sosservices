@@ -69,7 +69,7 @@ public class ContactEndpointImpl implements ContactEndpoint{
 			String regID = request.getHeader("Authorization");
 			System.out.println(" regID from header "+regID );
 			 
-			return Response.ok().entity(contactFacade.checkBalance(regID)).build();
+			return Response.ok().entity(contactFacade.checkBalance(regID, null)).build();
 		}catch(Exception e){
 			e.printStackTrace();
 			LoginVO vo = new LoginVO();

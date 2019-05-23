@@ -4,6 +4,7 @@ import {CountryCodes} from './isdCodes'
 import {ConfirmationService} from 'primeng/api';
 import {ContactService} from './contact.service';
 import {MessageService} from 'primeng/api';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,13 +13,14 @@ import {MessageService} from 'primeng/api';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  public displayAlert : Boolean = false;
+  public alertContent : String;
   public msgs = [];
   public contact : Contact = new Contact();
   public contactList : Array<Contact> = [];
   public countryCodes : CountryCodes = new CountryCodes();
   constructor(private confirmationService: ConfirmationService, private contactService : ContactService,
-    private messageService: MessageService) { 
+    private messageService: MessageService,private _router: Router) { 
       
   }
 
@@ -30,9 +32,16 @@ export class HomeComponent implements OnInit {
     
     this.contactService.getContacts( ).subscribe(
       (contactList: Array<Contact>) => {
-        this.contactList = [];
-        for (let i=0;i<contactList.length; i++){
-          this.contactList.push(contactList[i]);
+        if (null != contactList && contactList.length > 0){
+          this.contactList = [];
+          for (let i=0;i<contactList.length; i++){
+            this.contactList.push(contactList[i]);
+          }
+          this.checkBalance();
+        }else {
+          this.displayAlert = true;
+          this.alertContent = "You don't haven't added any contact person yet. Please add atleast one contact person's name and phone number along with country code.";
+          
         }
         
       }, error => {
@@ -40,6 +49,26 @@ export class HomeComponent implements OnInit {
         let serverError:string = "Something unusual happened. Please try again later.";
         this.msgs.push({severity:'error', summary:'Server Error', detail:serverError});
         //this.messageService.add({severity:'error', summary:'Service Error!', detail:serverError});
+      }
+    );
+  }
+
+  checkBalance():void{
+    this.contactService.checkBalance( ).subscribe(
+      (balanceAmount: String) => {
+        if (balanceAmount == null || balanceAmount =="" || (parseInt(balanceAmount.toString() ) <10)){
+          
+          this.confirmationService.confirm({
+            message: 'You are low on cash. You need to add cash to make phone calls. Do you want to add now?',
+            accept: () => {
+              this._router.navigate(['addcash']);
+            }
+        });
+        }
+        
+      }, error => {
+        console.log(error)
+       
       }
     );
   }

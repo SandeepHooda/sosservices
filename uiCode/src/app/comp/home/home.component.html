@@ -26,3 +26,10 @@
 </div>
 <p-toast position="top-left"></p-toast>
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-dialog header="Alert" [(visible)]="displayAlert" [transitionOptions]="'500ms'" [modal]="true" [responsive]="true">
+    {{alertContent}}
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="displayAlert=false" label="Ok"></button>
+        
+    </p-footer>
+</p-dialog>

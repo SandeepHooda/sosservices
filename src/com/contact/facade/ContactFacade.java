@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.communication.email.EmailAddess;
+import com.communication.email.MailService;
 import com.contact.vo.Contact;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,20 +19,32 @@ public class ContactFacade {
 	private LoginFacade loginFacede = new LoginFacade();
 	
 	public List<Contact> getContacts(String regID){
-		Settings settings=  getSettings( regID);
+		Settings settings=  getSettings( regID, null);
 		if (null != settings && settings.getContactList() != null) {
 			return settings.getContactList();
 		}else {
 			return new ArrayList<Contact>();
 		}
 	}
-	public String checkBalance(String regID) {
-		LoginVO user = loginFacede.validateRegID(regID);
-		if (null != user) {
+	public String checkBalance(String regID, String email) {
+		if (email == null ) {
+			LoginVO user = loginFacede.validateRegID(regID);
+			if (null != user) {
+				email = user.getEmailID();
+			}
+		}
+		
+		if (null != email) {
 			Gson json = new Gson();
-			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", user.getEmailID(), null,true, null, null);
+			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
 			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
-	
+			 double balance = settings.getCurrentCallCredits();
+			 if (balance >10) {
+				 EmailAddess toAddress = new EmailAddess();
+				 toAddress.setAddress(email);
+				 new  MailService().sendSimpleMail(MailService.prepareEmailVO(toAddress, "Please add call credits to your SOS Services account.",	"Please add cash credit to enable us to call your contacts when you need to. https://sosservices.appspot.com/ui/#/addcash", null, null));
+					
+			 }
 			 return ""+settings.getCurrentCallCredits();
 		}
 		
@@ -40,7 +54,7 @@ public class ContactFacade {
 	
 	
 	public List<Contact> deleteContact(String regID, String entry, String name){
-		Settings settings=  getSettings( regID);
+		Settings settings=  getSettings( regID, null);
 		if (null != settings && settings.getContactList() != null) {
 			Iterator<Contact> itr = settings.getContactList().iterator();
 			while (itr.hasNext()) {
@@ -58,12 +72,17 @@ public class ContactFacade {
 		loginFacede.updateSettings(settings);
 		return settings.getContactList();
 	}
-	public Settings  getSettings(String regID){
+	public Settings  getSettings(String regID, String email){
 		
+		if (null == email) {
+			LoginVO loginVO = loginFacede.validateRegID(regID);
+			if (null != loginVO ) {
+			 email = loginVO.getEmailID();
+			}
+		}
 		//1. Get email from reg id
-		LoginVO loginVO = loginFacede.validateRegID(regID);
-		if (null != loginVO ) {
-			String email = loginVO.getEmailID();
+		
+		
 			if (email != null) {
 				//2. Get setting via email
 				Settings settings = loginFacede.getUserSettings( email);
@@ -75,13 +94,13 @@ public class ContactFacade {
 				settings.setContactList(contactList);
 				return settings;
 			}
-		}
+		
 		return null;
 	}
 	
 	
 	public List<Contact> addContact(Contact contact, String regID){
-		Settings settings=  getSettings( regID);
+		Settings settings=  getSettings( regID, null);
 		if (null != settings) {
 			List<Contact> contactList = settings.getContactList();
 			if (null == contactList) {

@@ -35,7 +35,7 @@ public class Handler extends HttpServlet {
     
    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
+    	System.out.println(" Request from google ");
 		boolean needLocation = false;
 		 StringBuilder sb = new StringBuilder();
         String s;
@@ -65,6 +65,7 @@ public class Handler extends HttpServlet {
 		String name = null;
 		String timeZones[] = null;
 		boolean continueConversation = true;
+		boolean expectUserResponse = true;
 		if (null != access_token) {
 			Map<String, String> userData = new Oauth().getUserEmailFromMangoD(access_token);
 			email = userData.get("emailID");
@@ -76,16 +77,35 @@ public class Handler extends HttpServlet {
 			String geoCountry = (String) googlerequest.getQueryResult().getParameters().get("geo-country");
 			String phoneNumber = (String) googlerequest.getQueryResult().getParameters().get("phone-number");
 			String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
-			System.out.println();
+			
 			char[] phoneChars = phoneNumber.toCharArray();
 			StringBuilder phoneWithSpaces = new StringBuilder();
 			for (char digit: phoneChars) {
 				phoneWithSpaces.append(digit +" ");
 			}
-			serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your to your contacts list ";
+			serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your  contacts list ";
+		}else if ("DeleteContacts".equalsIgnoreCase(intent) && null != queryText){
+			String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
+			
+			serviceResponse =   name+", Do you want to delete  "+nameOfContact;
+			continueConversation = false;
+		}else if ("DeleteContacts - yes".equalsIgnoreCase(intent) && null != queryText) {
+			String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
+			
+			serviceResponse =   name+", I have deleted  "+nameOfContact;
+			
+		}else if ("GetContactList".equalsIgnoreCase(intent) && null != queryText) {
+			serviceResponse =   name+", I will get your contact list  ";
+			
+		}else if ("MakeACall".equalsIgnoreCase(intent) || "Default Welcome Intent - yes".equalsIgnoreCase(intent) || 
+				"Default Fallback Intent - yes".equalsIgnoreCase(intent)){
+			serviceResponse =   name+", I will make a call  ";
+			continueConversation = false;
+			expectUserResponse = false;
+			
 		}
 			else {
-			serviceResponse = name+", Should I call your contacts ";
+			serviceResponse = name+", Should I call your contacts? ";
 			continueConversation = false;
 			
 		}
@@ -98,17 +118,17 @@ public class Handler extends HttpServlet {
 		"  \"fulfillmentText\": \"  "+serviceResponse+continueStr+"  \",\r\n" + 
 		"  \"outputContexts\": []\r\n" + 
 		"}";*/
-		String responseStr =  getCompleteResponse( serviceResponse+continueStr);
+		String responseStr =  getCompleteResponse( serviceResponse+continueStr , expectUserResponse);
 		 
 		 System.out.println("intent "+intent+" queryText "+queryText+" serviceResponse "+responseStr);
-		
+		 out.print(responseStr );
        
        out.flush();   
 	}
    
     
-    private String getCompleteResponse(String textToSpeak) {
-    	return responsePre+textToSpeak+responsePost;
+    private String getCompleteResponse(String textToSpeak, boolean expectUserResponse) {
+    	return responsePre_1+expectUserResponse+responsePre_2+textToSpeak+responsePost;
     	
     }
    
@@ -121,10 +141,11 @@ public class Handler extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	private static final String responsePre = "{\r\n" + 
+	private static final String responsePre_1 = "{\r\n" + 
 			"  \"payload\": {\r\n" + 
 			"    \"google\": {\r\n" + 
-			"      \"expectUserResponse\": true,\r\n" + 
+			"      \"expectUserResponse\": ";
+	private static final String responsePre_2 = " ,\r\n" + 
 			"      \"richResponse\": {\r\n" + 
 			"        \"items\": [\r\n" + 
 			"          {\r\n" + 

@@ -40,6 +40,19 @@
     <url-pattern>/Oauth</url-pattern>
   </servlet-mapping>
   
+  
+  <servlet>
+    <description></description>
+    <display-name>Handler</display-name>
+    <servlet-name>Handler</servlet-name>
+    <servlet-class>googleAssistant.Handler</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Handler</servlet-name>
+    <url-pattern>/Handler</url-pattern>
+  </servlet-mapping>
+  
+  
   <servlet>
     <description></description>
     <display-name>AddCash</display-name>

@@ -7,6 +7,17 @@ public class Contact {
 	private String phoneNumber ;
 	private String contactName;
 	
+	public Contact() {
+		
+	}
+	
+	public Contact(String userEntry, String contactName, String countryCode, String phoneNumber) {
+		this.contactName = contactName;
+		this.userEntry = userEntry;
+		this.countryCode = countryCode;
+		this.phoneNumber = phoneNumber;
+		
+	}
 	public String getUserEntry() {
 		return userEntry;
 	}

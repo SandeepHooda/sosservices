@@ -19,12 +19,29 @@ public class ContactFacade {
 	private LoginFacade loginFacede = new LoginFacade();
 	
 	public List<Contact> getContacts(String regID){
-		Settings settings=  getSettings( regID, null);
+		return getContacts( regID, null);
+	}
+	public List<Contact> getContacts(String regID, String email){
+		Settings settings=  getSettings( regID, email);
 		if (null != settings && settings.getContactList() != null) {
 			return settings.getContactList();
 		}else {
 			return new ArrayList<Contact>();
 		}
+	}
+	
+	public Settings getCallSetings( String email) {
+		
+			Gson json = new Gson();
+			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
+			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+			 if (settings == null) {
+				 settings = new Settings();
+				 settings.set_id(email);
+			 }
+			 
+			 return settings;
+		
 	}
 	public String checkBalance(String regID, String email) {
 		if (email == null ) {
@@ -38,6 +55,10 @@ public class ContactFacade {
 			Gson json = new Gson();
 			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
 			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
+			 if (settings == null) {
+				 settings = new Settings();
+				 settings.set_id(email);
+			 }
 			 double balance = settings.getCurrentCallCredits();
 			 if (balance <=10) {
 				 EmailAddess toAddress = new EmailAddess();
@@ -60,6 +81,22 @@ public class ContactFacade {
 			while (itr.hasNext()) {
 				Contact contact = itr.next();
 				if ((name != null && name.equals(contact.getUserEntry()) ) || (entry != null && entry.equals(contact.getUserEntry()) )) {
+					itr.remove();
+					break;
+				}
+			}
+			return updateContact( settings);
+		}
+		return new ArrayList<Contact>();
+	}
+	
+	public List<Contact> deleteContact(Contact contact, String email){
+		Settings settings=  getSettings( null, email);
+		if (null != settings && settings.getContactList() != null) {
+			Iterator<Contact> itr = settings.getContactList().iterator();
+			while (itr.hasNext()) {
+				Contact contactDB = itr.next();
+				if (contactDB.getContactName().equalsIgnoreCase(contact.getContactName()) ) {
 					itr.remove();
 					break;
 				}
@@ -98,9 +135,15 @@ public class ContactFacade {
 		return null;
 	}
 	
-	
 	public List<Contact> addContact(Contact contact, String regID){
-		Settings settings=  getSettings( regID, null);
+		contact.setContactName(contact.getContactName().trim());
+		contact.setCountryCode(contact.getCountryCode().trim());
+		contact.setPhoneNumber(contact.getPhoneNumber().trim());
+		return  addContact( contact,  regID,null);
+	}
+	
+	public List<Contact> addContact(Contact contact, String regID,String email){
+		Settings settings=  getSettings( regID, email);
 		if (null != settings) {
 			List<Contact> contactList = settings.getContactList();
 			if (null == contactList) {

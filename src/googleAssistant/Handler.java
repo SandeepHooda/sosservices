@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.Oauth;
 import com.google.gson.Gson;
 
+import googleAssistant.util.CountryMap;
 import request.GoogleRequest;
 
 /**
@@ -74,16 +75,25 @@ public class Handler extends HttpServlet {
        
 		System.out.println(" got email and name from mango DB "+email+" "+name);
 		if ("AddPhone".equalsIgnoreCase(intent) && null != queryText){
-			String geoCountry = (String) googlerequest.getQueryResult().getParameters().get("geo-country");
-			String phoneNumber = (String) googlerequest.getQueryResult().getParameters().get("phone-number");
-			String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
+			serviceResponse =   name+", I didn't understand what you just said. Please try again.";
+			Map<String, String> geoCountry = (Map<String, String>) googlerequest.getQueryResult().getParameters().get("geo-country-code");
+			String isd = CountryMap.data.get(geoCountry.get("alpha-2"));
 			
-			char[] phoneChars = phoneNumber.toCharArray();
-			StringBuilder phoneWithSpaces = new StringBuilder();
-			for (char digit: phoneChars) {
-				phoneWithSpaces.append(digit +" ");
-			}
-			serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your  contacts list ";
+				if (isd != null) {
+					
+					String phoneNumber = (String) googlerequest.getQueryResult().getParameters().get("phone-number");
+					String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
+					
+					char[] phoneChars = phoneNumber.toCharArray();
+					StringBuilder phoneWithSpaces = new StringBuilder();
+					for (char digit: phoneChars) {
+						phoneWithSpaces.append(digit +" ");
+					}
+					serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your  contacts list country "+isd;
+					
+				}
+			
+			
 		}else if ("DeleteContacts".equalsIgnoreCase(intent) && null != queryText){
 			String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
 			

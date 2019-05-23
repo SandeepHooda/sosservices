@@ -39,7 +39,7 @@ public class ContactFacade {
 			String settingsJson = MangoDB.getDocumentWithQuery("remind-me-on", "registered-users-settings", email, null,true, null, null);
 			 Settings settings = json.fromJson(settingsJson, new TypeToken<Settings>() {}.getType());
 			 double balance = settings.getCurrentCallCredits();
-			 if (balance >10) {
+			 if (balance <=10) {
 				 EmailAddess toAddress = new EmailAddess();
 				 toAddress.setAddress(email);
 				 new  MailService().sendSimpleMail(MailService.prepareEmailVO(toAddress, "Please add call credits to your SOS Services account.",	"Please add cash credit to enable us to call your contacts when you need to. https://sosservices.appspot.com/ui/#/addcash", null, null));

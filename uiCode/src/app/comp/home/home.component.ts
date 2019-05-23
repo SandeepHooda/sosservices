@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
           this.checkBalance();
         }else {
           this.displayAlert = true;
-          this.alertContent = "You don't haven't added any contact person yet. Please add atleast one contact person's name and phone number along with country code.";
+          this.alertContent = "You haven't added any contact person yet. Please add atleast one contact person's name and phone number along with country code.";
           
         }
         
@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
         if (balanceAmount == null || balanceAmount =="" || (parseInt(balanceAmount.toString() ) <10)){
           
           this.confirmationService.confirm({
-            message: 'You are low on cash. You need to add cash to make phone calls. Do you want to add now?',
+            message: 'You are low on cash. You need to add cash to enable us make phone calls to your contacts. Do you want to add now?',
             accept: () => {
               this._router.navigate(['addcash']);
             }

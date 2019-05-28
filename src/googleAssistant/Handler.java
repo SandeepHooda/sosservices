@@ -152,37 +152,54 @@ public class Handler extends HttpServlet {
 		}else if ("MakeACall".equalsIgnoreCase(intent) || "Default Welcome Intent - yes".equalsIgnoreCase(intent) || 
 				"Default Fallback Intent - yes".equalsIgnoreCase(intent)){
 			double balance = checkbalance(email);
-			if ( balance > -100) {
-				if (balance >= 10) {
-					Settings settings =  contactFacade.getCallSetings(email);
-					List<Contact> contactList = contactFacade.getContacts(null,  email);
-					
-					if (null != contactList && contactList.size() > 0) {
-						expectUserResponse = false;
-						serviceResponse =   name+", I am calling ";
-						for (Contact aContact:contactList ) {
-							String phone = aContact.getCountryCode().trim() + aContact.getPhoneNumber().trim();
-							phone = phone.replaceAll("[^\\d.]", "");
-							serviceResponse +=aContact.getContactName()+ ", ";
+			Settings settings =  contactFacade.getCallSetings(email);
+			List<Contact> contactList = contactFacade.getContacts(null,  email);
+			if (null != contactList && contactList.size() > 0) {
+						if ( balance > -100) {
+							if (balance >= 10) {
+								
+								expectUserResponse = false;
+								serviceResponse =   name+", I am calling ";
+								for (Contact aContact:contactList ) {
+									String phone = aContact.getCountryCode().trim() + aContact.getPhoneNumber().trim();
+									phone = phone.replaceAll("[^\\d.]", "");
+									serviceResponse +=aContact.getContactName()+ ", ";
+									
+									String msg = aContact.getContactName()+", I am calling your on behalf of "+name+". "+name+
+											"  needs your immediate help. Please get in touch with "+name+" immediately. ";
+									makeACall(name, email,  phone,aContact.getContactName(), msg,  settings);
+								}
+								serviceResponse += " to notify that you need help.";
+								expectUserResponse = false;
+								continueConversation = false;
+								
+							}else {
+								
+								serviceResponse =   name+", Please add cash credit to enable us to call your contacts when you need to. Please check your email for details to add cash to your account."; 
+								expectUserResponse = false;
+								continueConversation = false;
+							}
 							
-							String msg = aContact.getContactName()+", I am calling your on behalf of "+name+". "+name+
-									"  needs your immediate help. Please get in touch with "+name+" immediately. ";
-							makeACall(name, email,  phone,aContact.getContactName(), msg,  settings);
+						}else {//it is dummy account
+							serviceResponse =   name+", This app can Make a call to your family members that you have saved to the contact list. Also you need to add balance to your account that will be used to make a call. "
+									+ "Right now you have saved "+contactList.size()+" contacts in your contact list.  This app is not an emergeny service and will not call 9 1 1 or any other emergency services. "
+											+ "You are uising this app as a demo account. Make a call  feature to your contact list  is disabled as a test account. You need to sign in with as real user. ";
+							expectUserResponse = true;
+							continueConversation = true;
 						}
-						serviceResponse += " to notify that you need help.";
+							
+						
+						
 					}else {
-						serviceResponse += " You haven't added any contact person in your contact list. Please add by saying add a new contact. ";
+						serviceResponse +=
+								"I can't call emergency services like 9 1 1 but I can call your family members when you ask me to do for example in emergency situations."
+								+ "For that You haven't added  contact person in your contact list. Please add a new contact by saying add a new contact. ";
+						expectUserResponse = true;
+						continueConversation = false;
 					}
 					
-				}else {
-					
-					serviceResponse =   name+", Please add cash credit to enable us to call your contacts when you need to. Please check your email for details to add cash to your account."; 
-				}
 				
-			}else {//it is dummy account
-				serviceResponse =   name+", Make a call feature is disabled for test accounts. You need to sign in with as real user. ";
-			}
-			continueConversation = false;
+			
 			
 			
 		}else if ("Default Welcome Intent".equalsIgnoreCase(intent)){

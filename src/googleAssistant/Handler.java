@@ -96,17 +96,24 @@ public class Handler extends HttpServlet {
 				if (isd != null) {
 					
 					String phoneNumber = (String) googlerequest.getQueryResult().getParameters().get("phone-number");
-					String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
-					
+					phoneNumber = phoneNumber.replaceAll("[^\\d.]", "");
 					char[] phoneChars = phoneNumber.toCharArray();
 					StringBuilder phoneWithSpaces = new StringBuilder();
 					for (char digit: phoneChars) {
 						phoneWithSpaces.append(digit +" ");
 					}
+					if (phoneNumber.length() <7 || phoneNumber.length() >15) {
+						serviceResponse =   name+",  "+phoneWithSpaces+" , is not a valid phone number. The minimum length of phone number must be 7 and maximum length must be 15.";
+					}else {
+						String nameOfContact = (String) googlerequest.getQueryResult().getParameters().get("any");
+						
+						
+						
+						Contact contact = new Contact(nameOfContact + " "+isd+ " "+phoneNumber, nameOfContact, isd, phoneNumber);
+						contactFacade.addContact(contact, null, email);
+						serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your  contacts list country "+isd;
+					}
 					
-					Contact contact = new Contact(nameOfContact + " "+isd+ " "+phoneNumber, nameOfContact, isd, phoneNumber);
-					contactFacade.addContact(contact, null, email);
-					serviceResponse =   name+", I have added "+nameOfContact+" phone number "+phoneWithSpaces+" to your  contacts list country "+isd;
 					
 				}
 			
